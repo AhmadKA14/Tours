@@ -1,25 +1,39 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import Loading from "./componenets/Loading";
+import Tours from "./componenets/Tours";
+import data from "./componenets/data"
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+export default function App() {
+    const [loading, setLoading] = useState(false)
+    const [tours, setTours] = useState(data)
+
+    function removeTour(id) {
+        const newTours = tours.filter(tour => tour.id !== id)
+        setTours(newTours)
+    }
+
+    if (loading) {
+        return (
+            <main>
+                <Loading />
+            </main>
+        )
+    }
+
+    if (tours.length === 0) {
+        return (
+            <main>
+                <div className="title">
+                    <h2>no tours left</h2>
+                    <button className="btn" onClick={() => setTours(data)}>refresh</button>
+                </div>
+            </main>
+        )
+    }
+
+    return (
+        <main>
+            <Tours tours={tours} removeTour={removeTour} />
+        </main>
+    )
 }
-
-export default App;
